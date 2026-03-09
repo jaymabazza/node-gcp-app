@@ -16,7 +16,6 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-export default app; // Exporting for the test we will write in Step 2
 
 if (process.env.NODE_ENV !== 'test') {
   const port = parseInt(process.env.PORT) || 8080;
@@ -24,3 +23,6 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`Server listening on port ${port}`);
   });
 }
+
+export default app;
+

@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js index.test.mjs"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js index.test.mjs --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",
