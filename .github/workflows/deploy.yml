@@ -7,7 +7,7 @@ on:
 env:
   PROJECT_ID: jay-personal-learning  # e.g., my-sample-project
   REGION: us-central1          # e.g., us-east1
-  SERVICE: simple-hello-world  # Name your service
+  SERVICE: cloud-run-service-test  # Name your service
 
 jobs:
   deploy:
