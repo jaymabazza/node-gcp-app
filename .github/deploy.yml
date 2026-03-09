@@ -1,0 +1,47 @@
+name: Test and Deploy to Cloud Run
+
+on:
+  push:
+    branches: [ "main" ] # Trigger only on pushes to your main branch
+
+env:
+  PROJECT_ID: your-project-id # Replace with your GCP Project ID
+  REGION: us-central1          # Replace with your preferred region
+  SERVICE: node-gcp-app       # The name of your Cloud Run service
+  WIF_PROVIDER: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/providers/github-provider # Replace PROJECT_NUMBER
+  WIF_SERVICE_ACCOUNT: github-deployer@PROJECT_ID.iam.gserviceaccount.com # Replace PROJECT_ID
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    # Required permissions for Workload Identity Federation
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install and Test
+        run: |
+          npm install
+          npm test # The workflow stops here if your tests fail!
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.WIF_SERVICE_ACCOUNT }}
+
+      - name: Build and Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          source: ./ # This automatically builds your Dockerfile
