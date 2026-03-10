@@ -27,3 +27,4 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           source: ./ # Automatically uses your Dockerfile to build
+          flags: '--allow-unauthenticated'
